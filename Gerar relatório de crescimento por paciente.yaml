@@ -1,0 +1,101 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: Gerar relatório de crescimento por paciente
+  description: Especificação 'Gerar relatório de crescimento por paciente' do curso Implantando e Gerenciando o Apigee do Google
+  contact:
+    email: cleison@estiatraining.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+host: suport-eval-prod.apigee.net
+basePath: /gerar-relatorio-cresc-paciente/v1
+schemes:
+  - http
+  - https
+tags:
+  - name: Criança Specs
+    description: Tudo sobre a especificação 'Gerar relatório de crescimento por paciente'
+security:
+  - token: []
+paths:
+  /accounts/{email}/progress:
+    get:
+      tags:
+        - Criança Specs
+      summary: Recupera todos os progressos pelo email de um paciente
+      operationId: getProgressByEmail
+      produces:
+        - application/json
+      parameters:
+        - name: email
+          in: path
+          description: Email de um paciente
+          type: string
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/body_response'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/body_response_error_401'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/body_response_error_404'
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/body_response_error_500'
+securityDefinitions:
+  token:
+    type: apiKey
+    in: header
+    name: token
+    description: Token Oauth2 no header 'XEGcM8qhkEmy3zAVHkqcRKp5m0u0'
+definitions:
+  body_response:
+    type: object
+    required:
+      - dateProgress
+      - headCircumference
+      - height
+      - weight
+    properties:
+      height:
+        type: number
+      weight:
+        type: number
+        example: 45
+      headCircumference:
+        type: number
+      dateProgress:
+        type: string
+        format: date
+  body_response_error_401:
+    type: object
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        example: Token enviado invalido ou expirado
+  body_response_error_404:
+    type: object
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        example: Recurso {email} não encontrado
+  body_response_error_500:
+    type: object
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        example: Erro no processo de request da API verifique o log do servidor

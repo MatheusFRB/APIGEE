@@ -1,0 +1,285 @@
+swagger: '2.0'
+info:
+  version: '1.0.0'
+  title: Criar novas contas de pacientes
+  description: Especificação 'Criar novas contas de pacientes' do curso Implantando e Gerenciando o Apigee do Google
+  contact:
+    email: cleison@estiatraining.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+host: suport-eval-prod.apigee.net
+basePath: /criar-contas-pacientes/v1
+schemes:
+  - http
+  - https
+tags:
+  - name: Criança Specs
+    description: Tudo sobre a especificação 'Criar novas contas de pacientes'
+security:
+  - token: []
+paths:
+  /accounts:
+    get:
+      tags:
+        - Criança Specs
+      summary: Recuperar todas as contas
+      operationId: getAccounts
+      produces:
+        - application/json
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/body_response'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/body_response_error_401'
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/body_response_error_500'
+    post:
+      tags:
+        - Criança Specs
+      summary: Cria uma nova conta
+      operationId: postAccounts
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - in: body
+          name: accounts
+          description: Persiste uma nova conta de paciente
+          required: true
+          schema:
+            $ref: '#/definitions/body_request'
+      responses:
+        201:
+          description: Created
+          schema:
+            $ref: '#/definitions/body_response'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/body_response_error_400'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/body_response_error_401'
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/body_response_error_500'
+  /accounts/{id}:
+    get:
+      tags:
+        - Criança Specs
+      summary: Recupera uma conta pelo ID
+      operationId: getAccountsById
+      produces:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Account ID
+          type: integer
+          required: true
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/body_response'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/body_response_error_401'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/body_response_error_404'
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/body_response_error_500'
+    put:
+      tags:
+        - Criança Specs
+      summary: Atualiza uma conta pelo ID
+      operationId: putAccountsById
+      produces:
+        - application/json
+      consumes:
+        - application/json
+      parameters:
+        - name: id
+          in: path
+          description: Account ID
+          type: integer
+          required: true
+        - in: body
+          name: accounts
+          description: Persiste uma nova conta de paciente
+          required: true
+          schema:
+            $ref: '#/definitions/body_request'
+      responses:
+        200:
+          description: OK
+          schema:
+            $ref: '#/definitions/body_response'
+        400:
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/body_response_error_400'
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/body_response_error_401'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/body_response_error_404'
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/body_response_error_500'
+    delete:
+      tags:
+        - Criança Specs
+      summary: Excluir uma conta pelo ID
+      operationId: delAccountsById
+      parameters:
+        - name: id
+          in: path
+          description: Account ID
+          type: integer
+          required: true
+      responses:
+        204:
+          description: Accepted
+        401:
+          description: Unauthorized
+          schema:
+            $ref: '#/definitions/body_response_error_401'
+        404:
+          description: Not Found
+          schema:
+            $ref: '#/definitions/body_response_error_404'
+        500:
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/body_response_error_500'
+securityDefinitions:
+  token:
+    type: apiKey
+    in: header
+    name: token
+    description: Token Oauth2 no header 'XEGcM8qhkEmy3zAVHkqcRKp5m0u0'
+definitions:
+  body_response:
+    type: object
+    required:
+      - dateBirth
+      - email
+      - firstName
+      - gender
+      - id
+      - lastName
+      - phoneNumber
+    properties:
+      id:
+        type: integer
+        format: int32
+        example: 1
+      firstName:
+        type: string
+        example: First
+      lastName:
+        type: string
+        example: Last
+      email:
+        type: string
+        format: email
+        example: admin@admin.com
+      phoneNumber:
+        type: number
+      dateBirth:
+        type: string
+        format: date
+      gender:
+        type: string
+        example: M
+        enum:
+          - M
+          - F
+  body_request:
+    type: object
+    required:
+      - dateBirth
+      - email
+      - firstName
+      - gender
+      - lastName
+      - password
+      - phoneNumber
+    properties:
+      firstName:
+        type: string
+        example: First
+      lastName:
+        type: string
+        example: Last
+      email:
+        type: string
+        format: email
+        example: admin@admin.com
+      password:
+        type: string
+        format: password
+        example: '123'
+      phoneNumber:
+        type: number
+      dateBirth:
+        type: string
+        format: date
+      gender:
+        type: string
+        example: M
+        enum:
+          - M
+          - F
+  body_response_error_400:
+    type: object
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        example: Request body com problemas, verefique o JSON account enviado
+  body_response_error_401:
+    type: object
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        example: Token enviado invalido ou expirado
+  body_response_error_404:
+    type: object
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        example: Recurso {id} não encontrado
+  body_response_error_500:
+    type: object
+    required:
+      - message
+    properties:
+      message:
+        type: string
+        example: Erro no processo de request da API verifique o log do servidor
